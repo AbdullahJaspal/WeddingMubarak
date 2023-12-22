@@ -10,6 +10,7 @@ export const Header = ({
   leftOPacity,
   title = '',
   rightOPacity,
+  logo = false,
 }) => {
   return (
     <View
@@ -35,15 +36,19 @@ export const Header = ({
           />
         </TouchableOpacity>
       )}
-      <Text
-        style={{
-          fontSize: moderateScale(20),
-          fontFamily: Theme.fontFamily.Poppins_Bold,
-          color: 'black',
-          marginLeft: leftOPacity !== 0 ? moderateScale(45) : 0,
-        }}>
-        {title}
-      </Text>
+      {logo ? (
+        <Image />
+      ) : (
+        <Text
+          style={{
+            fontSize: moderateScale(20),
+            fontFamily: Theme.fontFamily.Poppins_Regular,
+            color: 'black',
+            marginLeft: leftOPacity !== 0 ? moderateScale(45) : 0,
+          }}>
+          {title}
+        </Text>
+      )}
       <TouchableOpacity activeOpacity={1} onPress={rightOnPress}>
         <Image
           source={require('../../assets/images/headerImage.png')}

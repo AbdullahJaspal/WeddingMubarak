@@ -1,5 +1,4 @@
 import * as types from './types';
-
 import ShowSnackBar from '../../assets/Components/ShowSnackBar';
 
 export const userLogin = (
@@ -33,6 +32,31 @@ export const userLogin = (
     }
   };
 };
+export const userLoginMail = (formdata, onSuccessLogin, onErrorLogin) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/login.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          if (result.state === 'OK') {
+            ShowSnackBar('Login SuccessFull...', 'green');
+            dispatch(savedata(result.data.user));
+            onSuccessLogin('BottomTab');
+          } else {
+            onSuccessLogin('Auth', data);
+          }
+        });
+    } catch (err) {
+      onErrorLogin(err);
+    }
+  };
+};
 
 export const userRegistration = (
   formdata,
@@ -51,6 +75,7 @@ export const userRegistration = (
       fetch(`${types.BASE_URL}/register_user.php`, requestOptions)
         .then(response => response.json())
         .then(result => {
+          console.log('result');
           console.log(result);
           if (result.state === 'OK') {
             ShowSnackBar('Login SuccessFull...', 'green');
@@ -61,7 +86,6 @@ export const userRegistration = (
           }
         })
         .catch(error => {
-          console.log('fuck catch andar wala/....');
           console.log(error);
           onErrorRegistration(error);
         });
@@ -118,17 +142,16 @@ export const userUpdateProfile = (
       };
 
       fetch(`${types.BASE_URL}/update_user_profile.php`, requestOptions)
-        .then(response => response.json())
+        .then(response => response.text())
         .then(result => {
           console.log(result);
           if (result.state === 'OK') {
-            onSuccessUpdate(result.data.user);
+            // onSuccessUpdate(result.data.user);
           } else {
             onErrorUpdate(result);
           }
         })
         .catch(error => {
-          console.log('fuck catch andar wala/....');
           console.log(error);
           onErrorUpdate(error);
         });
@@ -152,7 +175,7 @@ export const getHomeScreen = (formdata, onSuccess, onError) => {
         .then(response => response.json())
         .then(result => {
           console.log(result);
-          console.log('result');
+          console.log('HomeData.....');
           console.log(result);
           if (result.state === 'OK') {
             onSuccess(result.data.all_users);
@@ -171,6 +194,73 @@ export const getHomeScreen = (formdata, onSuccess, onError) => {
     }
   };
 };
+
+export const toadysMatch = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/today_matches.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          console.log('result');
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data.all_liking);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
+export const recentMatches = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/recently_viewed.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          console.log('result');
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data.recent_viewed);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
 export const checkLikeSubscribtion = (formdata, onSuccess, onError) => {
   return async dispatch => {
     try {
@@ -204,6 +294,7 @@ export const checkLikeSubscribtion = (formdata, onSuccess, onError) => {
     }
   };
 };
+
 export const checkPremiumSubscribtion = (formdata, onSuccess, onError) => {
   return async dispatch => {
     try {
@@ -234,6 +325,7 @@ export const checkPremiumSubscribtion = (formdata, onSuccess, onError) => {
     }
   };
 };
+
 export const likeProfile = (formdata, onSuccess, onError) => {
   return async dispatch => {
     try {
@@ -264,6 +356,7 @@ export const likeProfile = (formdata, onSuccess, onError) => {
     }
   };
 };
+
 export const passProfile = (formdata, onSuccess, onError) => {
   return async dispatch => {
     try {
@@ -274,6 +367,37 @@ export const passProfile = (formdata, onSuccess, onError) => {
       };
 
       fetch(`${types.BASE_URL}/pass_profile.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
+export const unHideProfile = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/unhide_profile_details.php`, requestOptions)
         .then(response => response.json())
         .then(result => {
           console.log(result);
@@ -325,6 +449,7 @@ export const checkProfileLike = (formdata, onSuccess, onError) => {
     }
   };
 };
+
 export const checkProfilePass = (formdata, onSuccess, onError) => {
   return async dispatch => {
     try {
@@ -335,6 +460,37 @@ export const checkProfilePass = (formdata, onSuccess, onError) => {
       };
 
       fetch(`${types.BASE_URL}/check_profile_pass.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
+export const checkHide = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/check_hide_unhide.php`, requestOptions)
         .then(response => response.json())
         .then(result => {
           console.log(result);
@@ -386,6 +542,7 @@ export const getLikedProfiles = (formdata, onSuccess, onError) => {
     }
   };
 };
+
 export const getPassedProfiles = (formdata, onSuccess, onError) => {
   return async dispatch => {
     try {
@@ -416,6 +573,7 @@ export const getPassedProfiles = (formdata, onSuccess, onError) => {
     }
   };
 };
+
 export const getWhoLikedProfiles = (formdata, onSuccess, onError) => {
   return async dispatch => {
     try {
@@ -446,6 +604,7 @@ export const getWhoLikedProfiles = (formdata, onSuccess, onError) => {
     }
   };
 };
+
 export const getPremiumPakages = (formdata, onSuccess, onError) => {
   return async dispatch => {
     try {
@@ -508,6 +667,246 @@ export const getLikePakages = (formdata, onSuccess, onError) => {
   };
 };
 
+export const getAcceptedRequests = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/get_accepted_requests.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
+export const getConversation = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/get_conversations.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
+export const getMessages = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/get_conversation.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
+export const sendMessages = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/send_message.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
+export const getKeys = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/get_stripe_keys.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
+export const premiumSuccess = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/subscribe_to_package.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+
+export const like_premiumSuccess = (formdata, onSuccess, onError) => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/subscribe_to_like_package.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result);
+          if (result.state === 'OK') {
+            onSuccess(result.data);
+          } else {
+            onError(result);
+          }
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+          onError(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+      onError(err);
+    }
+  };
+};
+export const updateToken = formdata => {
+  return async dispatch => {
+    try {
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
+
+      fetch(`${types.BASE_URL}/update_token.php`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log('result');
+          console.log(result);
+        })
+        .catch(error => {
+          console.log('fuck catch andar wala/....');
+          console.log(error);
+        });
+    } catch (err) {
+      console.log('fuck .......');
+    }
+  };
+};
 //helping APIs
 
 export const callapi = data => {
@@ -523,7 +922,7 @@ export const stopapi = () => {
   };
 };
 
-export const handleLogOUt = () => {
+export const handleLogOut = () => {
   return {
     type: types.LOGOUT,
   };
@@ -543,9 +942,23 @@ export const likeSubs = data => {
   };
 };
 
-export const premiumSubs = data => {
+export const premiumSub = data => {
   return {
     type: types.PREMIUM_SUBS,
+    payload: data,
+  };
+};
+
+export const saveToken = data => {
+  return {
+    type: types.SAVE_TOKEN,
+    payload: data,
+  };
+};
+
+export const setFilters = data => {
+  return {
+    type: types.SET_FILTERS,
     payload: data,
   };
 };

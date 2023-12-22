@@ -1,5 +1,5 @@
 import {moderateScale} from './Dimensions';
-import {Dimensions} from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -12,21 +12,22 @@ export default Theme = {
     title: '#8C8889',
     border: '#7C7893',
     orange: '#FA9D27',
-    gray: '#98A1B3',
+    gray: '#7A797F',
     swiper: '#E7E8EA',
+    primary: '#C2272D',
+    darkgray: '#464648',
+    yellow: '#E7BB40',
+    orangeGradient: ['#FC9200', '#DA5B06'],
+    blueGradient: ['#61DBC3', '#2EB3BE'],
   },
   fontFamily: {
-    Poppins_Bold: 'Poppins-Bold',
-    Poppins_SemiBold: 'Poppins-SemiBold',
-    Poppins_Medium: 'Poppins-Medium',
-    Poppins_Regular: 'Poppins-Regular',
-    Poppins_Italic: 'Poppins-Italic',
-    Poppins_MediumItalic: 'Poppins-MediumItalic',
-    Poppins_BoldItalic: 'Poppins-BoldItalic',
-    Poppins_MediumItalic: 'Poppins-MediumItalic',
+    Poppins_Bold: 'Metropolis-Medium',
+    Poppins_Medium: 'Minion Condensed',
+    Poppins_Regular: 'Minion Pro Cond Caption',
+    comics: Platform.OS === 'ios' ? 'LeadingRoleDemoRegular' : 'COMIC',
   },
   fontSize: {
-    title: moderateScale(20),
+    title: moderateScale(18),
     regular: moderateScale(12),
   },
   size: {

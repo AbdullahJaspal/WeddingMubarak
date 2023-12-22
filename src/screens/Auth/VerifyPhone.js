@@ -16,7 +16,7 @@ import {CustomActivity} from '../../assets/Components/CustomActivity';
 import {DotIndicator} from 'react-native-indicators';
 import {useDispatch} from 'react-redux';
 import {userLogin} from '../../redux/actions/auth';
-import OTPTextView from 'react-native-otp-textinput';
+import OTPTextInput from 'react-native-otp-textinput';
 import {Button} from '@rneui/base';
 
 const {width, height} = Dimensions.get('window');
@@ -24,7 +24,7 @@ const {width, height} = Dimensions.get('window');
 const VerifyPhone = ({navigation, route}) => {
   const {number} = route.params;
   const dispatch = useDispatch();
-  const [confirm, setConfirm] = useState('');
+  const [confirm, setConfirm] = useState(null);
   const [otp, setOtp] = useState('');
   const [showActivity, setShowActivity] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -118,13 +118,12 @@ const VerifyPhone = ({navigation, route}) => {
             onCodeChanged={val => {}}
             onCodeFilled={confirmCode}
           /> */}
-          <OTPTextView
+          <OTPTextInput
             ref={e => (otpInput = e)}
             containerStyle={styles.otpInputView}
             textInputStyle={styles.underlineStyleBase}
             inputCount={6}
             tintColor={Theme.colors.reverseGradient[0]}
-            defaultValue={'######'}
             handleTextChange={code => {
               code.length === 6 && confirmCode(code);
             }}

@@ -1,42 +1,49 @@
 {
   "project_info": {
-    "project_number": "900226588142",
-    "project_id": "zivaj-d5fa2",
-    "storage_bucket": "zivaj-d5fa2.appspot.com"
+    "project_number": "98152326268",
+    "project_id": "wedding-mubarak-2ba17",
+    "storage_bucket": "wedding-mubarak-2ba17.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:900226588142:android:246027ec08e4f61b3742ff",
+        "mobilesdk_app_id": "1:98152326268:android:64301fe80fdb37018895f9",
         "android_client_info": {
-          "package_name": "com.zivaj"
+          "package_name": "com.WeddingMubarak"
         }
       },
       "oauth_client": [
         {
-          "client_id": "900226588142-l3b4qh3m9pfajd2dth08r1bje5dmc8ol.apps.googleusercontent.com",
+          "client_id": "98152326268-8pr10utqg788t11vuj92n86cbi6h4kr8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.zivaj",
-            "certificate_hash": "a55773502e9af1dcb0543c893c99e2e5548ffbf4"
+            "package_name": "com.WeddingMubarak",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "900226588142-i6fndb394e8258sojg9tafm7jouf1fc9.apps.googleusercontent.com",
+          "client_id": "98152326268-0g8c8102c0l3dp140jf0jr02aaousqr8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBl-Pxq5dS5Yo8Yre8pr6IJ0V9-_hSiXiM"
+          "current_key": "AIzaSyDxS59XDYW5GeZG-AtSJ3utCDtcNQ3rcU4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "900226588142-i6fndb394e8258sojg9tafm7jouf1fc9.apps.googleusercontent.com",
+              "client_id": "98152326268-0g8c8102c0l3dp140jf0jr02aaousqr8.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "98152326268-bho2ptknq60b0um56454paaia546lq3i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.WeddingMubarak"
+              }
             }
           ]
         }

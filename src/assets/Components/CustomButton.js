@@ -9,22 +9,31 @@ export const CustomButton = ({
   onPress,
   height = 45,
   textSize = 16,
-  fontFamily = Theme.fontFamily.Poppins_Bold,
+  fontFamily = Theme.fontFamily.Poppins_Medium,
   padding = 50,
-  radius=13
+  radius = 13,
+  disable = false,
+  stylees = {},
+  width = '90%',
+  color = ['#C2272D', '#C2272D'],
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={1}
       onPress={onPress}
-      style={{
-        alignSelf: 'center',
-        height: moderateScale(height),
-        borderRadius: moderateScale(radius),
-        overflow: 'hidden',
-      }}>
+      disabled={disable}
+      style={[
+        stylees,
+        {
+          alignSelf: 'center',
+          height: moderateScale(height),
+          borderRadius: moderateScale(radius),
+          overflow: 'hidden',
+          width: width,
+        },
+      ]}>
       <LinearGradient
-        colors={Theme.colors.reverseGradient}
+        colors={color}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
         style={{

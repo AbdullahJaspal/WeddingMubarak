@@ -1,19 +1,9 @@
 import React, {useEffect, useState} from 'react';
 
-import {
-  View,
-  Image,
-  Dimensions,
-  TextInput,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Image, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Theme from '../../Theme/Theme';
 import {useDispatch, useSelector} from 'react-redux';
-import {savedata} from '../../redux/actions/auth';
-import auth from '@react-native-firebase/auth';
-import ShowSnackBar from '../../assets/Components/ShowSnackBar';
+import {savedata, setFilters} from '../../redux/actions/auth';
 
 const SplashScreen = ({navigation}) => {
   const [num, setNum] = useState('');
@@ -21,17 +11,24 @@ const SplashScreen = ({navigation}) => {
   const dispatch = useDispatch();
   useEffect(() => {
     setTimeout(() => {
-      // navigation.replace(loggedIn ? 'BottomTab' : 'Intro');
+      navigation.replace(loggedIn ? 'BottomTab' : 'Intro');
+      const params = {
+        martial_status: 'empty',
+        religion: 'empty',
+        community: 'empty',
+        language: 'empty',
+      };
+      dispatch(setFilters(params));
       // dispatch(
       //   savedata({
-      //     uid: '6b3f2480-4e63-42f1-b885-e369bed8f0d2',
+      //     uid: '9a258666-884b-49b0-b460-872b1bf54a20',
       //     user_type: 'USER',
       //     first_name: 'Umair',
       //     last_name: 'Abbas',
       //     nick_name: 'optional',
       //     email: 'umairabbass786@gmail.com',
       //     phone: '03027064542',
-      //     looking_for: 'SOCIALIZING',
+      //     looking_for: 'men',
       //     gender: 'MAN',
       //     date_of_birth: '10/03/2000',
       //     martial_status: 'single',
@@ -55,8 +52,6 @@ const SplashScreen = ({navigation}) => {
       //     created_at: '2022-07-20 05:13:00',
       //   }),
       // );
-      navigation.replace('BottomTab');
-      // const confirmation = auth().signInWithPhoneNumber('+923006375182');
     }, 2000);
   }, []);
 
@@ -66,7 +61,7 @@ const SplashScreen = ({navigation}) => {
         flex: 1,
       }}>
       <LinearGradient
-        colors={Theme.colors.gradient}
+        colors={['#C2272D', '#C2272D']}
         style={{
           flex: 1,
           alignItems: 'center',
@@ -74,9 +69,9 @@ const SplashScreen = ({navigation}) => {
         }}>
         <Image
           style={{
-            width: (Dimensions.get('window').width / 100) * 80,
+            width: (Dimensions.get('window').width / 100) * 40,
           }}
-          source={require('../../assets/images/placeholder-logo-1.png')}
+          source={require('../../assets/images/splashLogo.png')}
           resizeMode="contain"
         />
       </LinearGradient>

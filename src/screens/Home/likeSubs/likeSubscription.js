@@ -13,6 +13,7 @@ import styles from './styles';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
 import {useDispatch} from 'react-redux';
 import {getLikePakages} from '../../../redux/actions/auth';
+import {CustomActivity} from '../../../assets/Components/CustomActivity';
 
 const data = [
   {
@@ -124,17 +125,28 @@ const LikeSubscribtion = ({navigation}) => {
         <Text style={styles.goldtext}>{item.title}</Text>
         <Text style={styles.monthText}>{item.validity} Days</Text>
         <View style={{height: 40}}></View>
-        <View style={styles.percentCont}>
-          <Text style={styles.twenety}>{item.description} % off</Text>
-          <Text style={styles.rupee}>{item.rupeeOff}</Text>
+        <View style={[styles.percentCont]}>
+          <Text style={styles.twenety}>{item.discount} % off</Text>
+          <Text style={styles.rupee}>
+            {'$'}
+            {item.price}
+          </Text>
         </View>
         <Text style={styles.mainRupee}>
-          {'Rs:'} {item.price}
+          {'$'} {Math.round(item.price - (item.discount / 100) * item.price)}
         </Text>
-        <Text style={{color: Theme.colors.gray, fontSize: 18}}>
-          {item.rupeePerMonth}
-        </Text>
-        <TouchableOpacity style={styles.button}>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate('StripeScreen', {
+              item: item,
+              pricee: Math.round(
+                item.price - (item.discount / 100) * item.price,
+              ),
+              screen: 'like',
+            });
+          }}>
           <Text
             style={{
               color: Theme.colors.gray,

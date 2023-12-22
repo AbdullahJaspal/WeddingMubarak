@@ -7,20 +7,35 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import {Icon} from '@rneui/base';
 import {moderateScale} from '../../../Theme/Dimensions';
 import Theme from '../../../Theme/Theme';
 import {Header} from '../../../assets/Components/Header';
-
+const {width, height} = Dimensions.get('screen');
 const Preferences = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Header
-        rightOPacity={0}
-        title={'Preferences'}
-        leftOnpress={() => navigation.goBack()}
-      />
+      <View style={Styles.header}>
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginBottom: 5}}>
+          <Icon
+            name="caretleft"
+            type="ant-design"
+            size={20}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
+          <Text style={{fontSize: 24}}>Preferences</Text>
+        </View>
+        <Image
+          style={{height: 30, width: '25%', marginBottom: 5}}
+          source={require('../../../assets/images/homeLogo.png')}
+          resizeMode={'contain'}
+        />
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -31,7 +46,7 @@ const Preferences = ({navigation}) => {
             style={{
               fontSize: Theme.fontSize.title,
               fontFamily: Theme.fontFamily.Poppins_Regular,
-              color: 'black',
+              color: Theme.colors.primary,
             }}>
             Basic Preference
           </Text>
@@ -59,17 +74,7 @@ const Preferences = ({navigation}) => {
           </View>
           <Icon name="chevron-right" type="feather" />
         </TouchableOpacity>
-        <TouchableOpacity style={Styles.tabCont}>
-          <Image
-            style={{width: 35, height: 35}}
-            source={require('../../../assets/images/locationn.png')}
-          />
-          <View style={Styles.middleCont}>
-            <Text style={Styles.tabTitle}>{'Location & Distance'}</Text>
-            <Text style={Styles.des}>Current Location - National</Text>
-          </View>
-          <Icon name="chevron-right" type="feather" />
-        </TouchableOpacity>
+
         <TouchableOpacity style={Styles.tabCont}>
           <Image
             style={{width: 35, height: 35}}
@@ -94,7 +99,11 @@ const Preferences = ({navigation}) => {
         </TouchableOpacity>
 
         <View style={Styles.tabCont}>
-          <Text style={{fontSize: Theme.fontSize.title, color: 'black'}}>
+          <Text
+            style={{
+              fontSize: Theme.fontSize.title,
+              color: Theme.colors.primary,
+            }}>
             Premium Preference
           </Text>
         </View>
@@ -204,8 +213,18 @@ const Preferences = ({navigation}) => {
 };
 
 const Styles = StyleSheet.create({
+  header: {
+    height: moderateScale(45),
+    width: Dimensions.get('window').width,
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    borderBottomWidth: 0.5,
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+  },
   tabCont: {
-    backgroundColor: Theme.colors.swiper,
+    backgroundColor: 'white',
     flexDirection: 'row',
     paddingHorizontal: moderateScale(20),
     height: moderateScale(55),
@@ -215,6 +234,8 @@ const Styles = StyleSheet.create({
   },
   middleCont: {
     width: '65%',
+    height: '80%',
+    justifyContent: 'space-between',
   },
   tabTitle: {
     color: 'black',

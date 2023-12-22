@@ -1,7 +1,7 @@
 import React from 'react';
 import Theme from '../../Theme/Theme';
 import {moderateScale} from '../../Theme/Dimensions';
-import {ImageBackground, View, StyleSheet, Dimensions} from 'react-native';
+import {Image, View, StyleSheet, Dimensions} from 'react-native';
 import {BarIndicator} from 'react-native-indicators';
 import * as Animatable from 'react-native-animatable';
 
@@ -10,15 +10,17 @@ const {width} = Dimensions.get('window');
 const CustomActivity = ({show, color}) => {
   return show === true ? (
     <View style={styles.mainContainer}>
-      <View
+      {/* <View
         style={[
           styles.backBlurr,
           {
-            backgroundColor: color ? Theme.colors.reverseGradient[0] : 'white',
+            backgroundColor: color
+              ? Theme.colors.reverseGradient[0]
+              : '#FCFCFF',
           },
         ]}
-      />
-      <View style={styles.subContainer}>
+      /> */}
+      {/* <View style={styles.subContainer}>
         <View style={styles.rowContainer}>
           <BarIndicator
             color={color ? color : Theme.colors.reverseGradient[0]}
@@ -52,7 +54,11 @@ const CustomActivity = ({show, color}) => {
             size={(width / 100) * 20}
           />
         </View>
-      </View>
+      </View> */}
+      <Image
+        style={{width: '60%', height: 150}}
+        source={require('../images/loaddd.gif')}
+      />
     </View>
   ) : null;
 };
@@ -64,6 +70,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+    backgroundColor: '#FCFCFF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   backBlurr: {
     position: 'absolute',

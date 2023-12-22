@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Zivaj</string>
+    <string name="app_name">WeddingMubarak</string>
 
 <string name="facebook_app_id">521251219689680</string>
 <string name="fb_login_protocol_scheme">fb1234</string>
 <string name="facebook_client_token">c395950d2d1a53eb5a2fdfe0af91d887</string>
 
-
+<string name="default_notification_channel_id">fcm_fallback_notification_channel</string> 
 </resources>

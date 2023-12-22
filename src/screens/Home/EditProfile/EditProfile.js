@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -31,258 +31,47 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {
   asAData,
   communityData,
-  heightData,
   hobbiesData,
   qualificationData,
 } from '../../Auth/DropDonwValues';
+import {CustomButton} from '../../../assets/Components/CustomButton';
 
 const {width} = Dimensions.get('window');
-
-const CustomDropDown = ({open, setOpen, data, setData, show, multiple}) => {
-  return (
-    <View
-      style={[
-        styles.dropDownContainer,
-        open && {
-          borderRadius: 0,
-        },
-      ]}>
-      {multiple ? (
-        <ModalDropdown
-          options={data}
-          onDropdownWillShow={() => setOpen(true)}
-          onDropdownWillHide={() => setOpen(false)}
-          multipleSelect={true}
-          renderRow={option => {
-            let temp = show.filter(f => f === option);
-            return (
-              <View
-                style={{
-                  width: (((width / 100) * 90) / 100) * 90,
-                  height: moderateScale(35),
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: moderateScale(10),
-                  backgroundColor: 'white',
-                }}>
-                <Text
-                  style={{
-                    color: temp.length !== 0 ? 'black' : 'grey',
-                    fontFamily: Theme.fontFamily.Poppins_Regular,
-                    fontSize: moderateScale(14),
-                  }}>
-                  {option}
-                </Text>
-                <Text
-                  style={{
-                    color:
-                      temp.length !== 0
-                        ? Theme.colors.reverseGradient[0]
-                        : 'transparent',
-                  }}>
-                  ✓
-                </Text>
-              </View>
-            );
-          }}
-          onSelect={index => {
-            let temporay = show.filter(f => f === data[index]);
-            if (temporay.length !== 0) {
-              setData(show.filter(f => f !== data[index]));
-            } else {
-              let temp = show.push(data[index]);
-            }
-          }}
-          dropdownStyle={{
-            width: (((width / 100) * 90) / 100) * 90,
-          }}
-          style={{
-            wid: '100%',
-            height: '100%',
-          }}>
-          <View style={styles.dropDownContainerWrapper}>
-            <Text style={[styles.dropDownText]}>
-              {multiple !== true ? show : 'Hobbies'}
-            </Text>
-            <AntDesign name={open ? 'caretup' : 'caretdown'} />
-          </View>
-        </ModalDropdown>
-      ) : (
-        <ModalDropdown
-          options={data}
-          onDropdownWillShow={() => setOpen(true)}
-          onDropdownWillHide={() => setOpen(false)}
-          onSelect={index => {
-            setData(data[index]);
-          }}
-          dropdownStyle={{
-            width: (((width / 100) * 90) / 100) * 90,
-          }}
-          style={{
-            wid: '100%',
-            height: '100%',
-          }}>
-          <View style={styles.dropDownContainerWrapper}>
-            <Text style={[styles.dropDownText]}>
-              {show === 'null' ? '' : show}
-            </Text>
-            <AntDesign name={open ? 'caretup' : 'caretdown'} />
-          </View>
-        </ModalDropdown>
-      )}
-    </View>
-  );
-};
-
-const CardContainer = ({heading, component}) => {
-  return (
-    <View
-      style={{
-        borderWidth: 0.5,
-        paddingBottom: moderateScale(20),
-        borderRadius: moderateScale(10),
-        borderColor: Theme.colors.orange,
-        width: (width / 100) * 90,
-        marginTop: moderateScale(20),
-      }}>
-      <Text
-        style={[
-          {
-            color: 'white',
-            backgroundColor: Theme.colors.orange,
-            textAlign: 'center',
-            fontSize: Theme.fontSize.title,
-            fontFamily: Theme.fontFamily.Poppins_Bold,
-            borderTopLeftRadius: moderateScale(10),
-            borderTopRightRadius: moderateScale(10),
-            height: moderateScale(45),
-            textAlignVertical: 'center',
-          },
-        ]}>
-        {heading}
-      </Text>
-      {component()}
-    </View>
-  );
-};
-
-const RowButton = ({
-  value,
-  setValue,
-  firstPossible,
-  secPossible,
-  FirstTag,
-  SecTag,
-}) => {
-  return (
-    <View style={styles.genderButtonCont}>
-      <TouchableOpacity
-        activeOpacity={1}
-        style={[
-          styles.genderButton,
-          {
-            backgroundColor:
-              value === firstPossible ? Theme.colors.orange : '#dedbd9',
-          },
-        ]}
-        onPress={() => {
-          setValue(firstPossible);
-        }}>
-        <Text
-          style={{
-            fontFamily: Theme.fontFamily.Poppins_Regular,
-            color: value === firstPossible ? 'white' : 'grey',
-          }}>
-          {FirstTag}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        activeOpacity={1}
-        style={[
-          styles.genderButton,
-          {
-            backgroundColor:
-              value === secPossible ? Theme.colors.orange : '#dedbd9',
-          },
-        ]}
-        onPress={() => {
-          setValue(secPossible);
-        }}>
-        <Text
-          style={{
-            fontFamily: Theme.fontFamily.Poppins_Regular,
-            color: value === secPossible ? 'white' : 'grey',
-          }}>
-          {SecTag}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-export const getAge = dob => {
-  var date_of_birth = new Date(dob);
-  //calculate month difference from current date in time
-  var month_diff = Date.now() - date_of_birth.getTime();
-
-  //convert the calculated difference in date format
-  var age_dt = new Date(month_diff);
-
-  //extract year from date
-  var year = age_dt.getUTCFullYear();
-
-  //now calculate the age of the user
-  var age = Math.abs(year - 1970);
-
-  return age;
-};
 
 const EditProfile = ({navigation}) => {
   const {userData} = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const [firstName, setFirstName] = useState(userData.first_name);
   const [lastName, setLastName] = useState(userData.last_name);
-  const [nickName, setNickName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [lookingFor, setLookingFor] = useState(userData.lookingFor);
   const [gender, setGender] = useState(userData.gender);
   const [dob, setDob] = useState(userData.date_of_birth);
-  const [maritalStatus, setMaritalStatus] = useState('');
-  const [diet, setDiet] = useState('');
+  const [age, setAge] = useState(getAge(userData.date_of_birth));
   const [height, setHeight] = useState(userData.height);
-  const [state, setState] = useState('');
   const [city, setCity] = useState(userData.city);
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState(userData.country);
   const [community, setCommunity] = useState(userData.community);
-  const [religon, setReligon] = useState('');
-  const [language, setLanguage] = useState('');
-  const [pray, setPray] = useState('');
   const [hobbies, setHobbies] = useState(
-    userData.hobbies === 'none'
+    userData.hobbies === 'none' || userData.hobbies === 'true'
       ? []
-      : JSON.parse(typeof userData.hobbies === 'string'),
+      : JSON.parse(userData.hobbies),
   );
   const [education, setEducation] = useState(userData.qualification);
   const [workWith, setWorkWith] = useState(userData.work_with);
   const [workAs, setWorkAs] = useState(userData.work_as);
   const [bio, setBio] = useState(userData.bio);
-  const [smoking, setSmoking] = useState(userData.smoke);
-  const [drinking, setDrinking] = useState(userData.drink);
-  const [relocate, setRelocate] = useState(userData.relocate === null && 'No');
-  const [disable, setDisable] = useState(false);
-  const [family, setFamily] = useState('');
+  const [relocate, setRelocate] = useState(
+    userData.relocate === null || userData.relocate === 'false'
+      ? 'No'
+      : userData.relocate,
+  );
   const [showActivity, setShowActivity] = useState(false);
   const [selfie, setSelfie] = useState(userData.selfie);
 
   const [images, setImages] = useState(userData.images || []);
-  const [response, setResponse] = useState({});
-  const [heightOpen, setHeightOpen] = useState(false);
   const [educationOpen, setEducationOpen] = useState(false);
   const [communityOpen, setCommunityOPen] = useState(false);
   const [hobbiesOpen, setHobbiesOPen] = useState(false);
-  const [relocateOpen, setRelocateOpen] = useState(false);
   const [worksAsOpen, setWorksAsOpen] = useState(false);
   const [lookingForOPen, setLookingForOpen] = useState(false);
   const datePIckerOpen = useRef();
@@ -295,18 +84,29 @@ const EditProfile = ({navigation}) => {
       getProfile();
     }, []),
   );
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  // APIs functions
 
   const getProfile = () => {
     var formdata = new FormData();
     formdata.append('__api_key__', 'secret key');
     formdata.append('user_uid', userData.uid);
-    console.log(formdata);
     setShowActivity(true);
     dispatch(userGetProfile(formdata, onSuccessProfile, onErrorProfile));
   };
   const onSuccessProfile = res => {
-    setResponse(res);
+    console.log('res');
+    console.log(res);
     dispatch(savedata(res));
+    setFirstName(res.first_name);
+    setLastName(res.last_name);
+    setDob(res.date_of_birth);
+    setGender(res.gender);
+    setLookingFor(res.looking_for);
+    setHobbies(JSON.parse(userData.hobbies));
     setShowActivity(false);
   };
 
@@ -314,6 +114,72 @@ const EditProfile = ({navigation}) => {
     setShowActivity(false);
     console.log(err);
   };
+
+  const handleSave = () => {
+    setShowActivity(true);
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'multipart/encrypted');
+    var formdata = new FormData();
+    formdata.append('__api_key__', 'secret key');
+    formdata.append('user_uid', userData.uid);
+    formdata.append('first_name', firstName);
+    formdata.append('last_name', lastName);
+    formdata.append('looking_for', lookingFor);
+    formdata.append('gender', gender);
+    formdata.append('dob', dob);
+    formdata.append('height', height);
+    formdata.append('about', userData.bio);
+    formdata.append('hobbies', JSON.stringify(hobbies));
+    formdata.append('qualification', education);
+    formdata.append('smoke', userData.smoke);
+    formdata.append('drink', userData.drink);
+    formdata.append('relocate', userData.relocate);
+    // formdata.append(
+    //   'selfie',
+    //   selfie?.uri
+    //     ? selfie
+    //     : {
+    //         uri: selfie,
+    //         name: selfie?.replace(/^.*[\\\/]/, ''),
+    //         type: `image/${selfie.replace(/^.*[\\\/]/, '').split('.')[1]}`,
+    //       },
+    // );
+    // if (images.length !== 0) {
+    //   for (let i = 0; i < images.length; i++) {
+    //     if (images[i]?.uri) {
+    //       formdata.append('images[]', {
+    //         uri: images[i].uri,
+    //         name: images[i].name,
+    //         type: images[i].type,
+    //       });
+    //     } else {
+    //       formdata.append('images[]', {
+    //         uri: images[i],
+    //         name: images[i].replace(/^.*[\\\/]/, ''),
+    //         type: `image/${images[i].replace(/^.*[\\\/]/, '').split('.')[1]}`,
+    //       });
+    //     }
+    //   }
+    // }
+
+    // formdata.append('images', '');
+
+    console.log(formdata);
+    dispatch(
+      userUpdateProfile(formdata, myHeaders, onSuccessUpdate, onErrorUpdate),
+    );
+  };
+
+  const onSuccessUpdate = res => {
+    setShowActivity(true);
+    getProfile();
+  };
+
+  const onErrorUpdate = err => {
+    setShowActivity(false);
+  };
+
+  // Designing functuions
 
   const hobbiesRenderItem = ({item, index}) => {
     return (
@@ -431,131 +297,36 @@ const EditProfile = ({navigation}) => {
     console.log(images);
   };
 
-  const handleSave = () => {
-    setShowActivity(true);
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'multipart/encrypted');
-
-    var formdata = new FormData();
-    formdata.append('__api_key__', 'secret key');
-    formdata.append('user_uid', userData.uid);
-    formdata.append('first_name', firstName);
-    formdata.append('last_name', lastName);
-    formdata.append(
-      'looking_for',
-      lookingFor === 'My Better Half'
-        ? 'HALF'
-        : lookingFor === 'Friends'
-        ? 'FRIENDS'
-        : 'SOCIALIZING',
-    );
-    formdata.append('gender', gender);
-    formdata.append('dob', dob);
-    formdata.append('height', height);
-    formdata.append('about', bio);
-    formdata.append('hobbies', JSON.stringify(hobbies));
-    formdata.append('qualification', education);
-    formdata.append('smoke', smoking);
-    formdata.append('drink', drinking);
-    formdata.append('relocate', relocate);
-    formdata.append(
-      'selfie',
-      selfie?.uri
-        ? selfie
-        : {
-            uri: selfie,
-            name: selfie?.replace(/^.*[\\\/]/, ''),
-            type: `image/${selfie.replace(/^.*[\\\/]/, '').split('.')[1]}`,
-          },
-    );
-    if (images.length !== 0) {
-      for (let i = 0; i < images.length; i++) {
-        if (images[i]?.uri) {
-          formdata.append('images[]', {
-            uri: images[i].uri,
-            name: images[i].name,
-            type: images[i].type,
-          });
-        } else {
-          formdata.append('images[]', {
-            uri: images[i],
-            name: images[i].replace(/^.*[\\\/]/, ''),
-            type: `image/${images[i].replace(/^.*[\\\/]/, '').split('.')[1]}`,
-          });
-        }
-      }
-    } else {
-      formdata.append('images[]', []);
-    }
-    console.log(formdata);
-    setShowActivity(true);
-    dispatch(
-      userUpdateProfile(formdata, myHeaders, onSuccessUpdate, onErrorUpdate),
-    );
-  };
-
-  const onSuccessUpdate = res => {
-    setShowActivity(false);
-    getProfile();
-  };
-
-  const onErrorUpdate = err => {
-    setShowActivity(false);
-  };
-
-  // const check = () => {
-  //   if (
-  //     response.first_name !== firstName ||
-  //     response.last_name !== lastName ||
-  //     response.looking_for !== lookingFor ||
-  //     response.gender !== gender ||
-  //     response.date_of_birth !== dob ||
-  //     response.height !== height ||
-  //     response.bio !== bio ||
-  //     JSON.parse(response.hobbies) !== hobbies ||
-  //     response.qualification !== education ||
-  //     response.smoke !== smoking ||
-  //     response.drink !== drinking ||
-  //     response.relocate !== relocate ||
-  //     response.selfie !== selfie ||
-  //     response.images !== images
-  //   ) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
-
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.header}>
-        <TouchableOpacity activeOpacity={1} onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../../../assets/images/backKey.png')}
-            resizeMode="contain"
-            style={{
-              height: moderateScale(30),
-              width: moderateScale(30),
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 5,
+          }}>
+          <Icon
+            name="caretleft"
+            type="ant-design"
+            size={20}
+            onPress={() => {
+              navigation.goBack();
             }}
           />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Edit Profile</Text>
-        <Text
-          onPress={() => {
-            handleSave();
-          }}
-          style={[
-            {
-              fontFamily: Theme.fontFamily.Poppins_Regular,
-              color: Theme.colors.orange,
-            },
-          ]}>
-          Save
-        </Text>
+          <Text
+            style={{fontSize: 24, fontFamily: Theme.fontFamily.Poppins_Medium}}>
+            Edit Profile
+          </Text>
+        </View>
+        <Image
+          style={{height: 30, width: '25%', marginBottom: 5}}
+          source={require('../../../assets/images/homeLogo.png')}
+          resizeMode={'contain'}
+        />
       </View>
       <ScrollView contentContainerStyle={{paddingBottom: moderateScale(100)}}>
         <View style={styles.photoTab}>
-          <Text style={styles.photoTitle}>My Photos</Text>
           <View style={styles.photoCont}>
             <TouchableOpacity
               activeOpacity={1}
@@ -566,12 +337,7 @@ const EditProfile = ({navigation}) => {
               style={styles.bigTab}>
               <Image
                 defaultSource={require('../../../assets/images/loadingimage.gif')}
-                source={{
-                  uri:
-                    typeof selfie === 'string'
-                      ? selfie
-                      : selfie.url || selfie.path || selfie.uri,
-                }}
+                source={{uri: userData.selfie}}
                 style={styles.imageStyle}
               />
             </TouchableOpacity>
@@ -622,7 +388,6 @@ const EditProfile = ({navigation}) => {
               style={[styles.smallTabs, {height: '100%', width: '24%'}]}>
               {images[2] ? (
                 <Image
-                  defaultSource={require('../../../assets/images/loadingimage.gif')}
                   source={{uri: images[2]?.uri ? images[2].uri : images[2]}}
                   style={styles.imageStyle}
                 />
@@ -639,7 +404,6 @@ const EditProfile = ({navigation}) => {
               style={[styles.smallTabs, {height: '100%', width: '24%'}]}>
               {images[3] ? (
                 <Image
-                  defaultSource={require('../../../assets/images/loadingimage.gif')}
                   source={{uri: images[3]?.uri ? images[3].uri : images[3]}}
                   style={styles.imageStyle}
                 />
@@ -682,15 +446,7 @@ const EditProfile = ({navigation}) => {
               )}
             </TouchableOpacity>
           </View>
-          <Text
-            style={[
-              styles.redText,
-              {
-                textAlign: 'right',
-              },
-            ]}>
-            Pick some photos that show the real you.
-          </Text>
+          <Text style={[styles.redText]}>Upload your Pictures</Text>
         </View>
         <View style={{width: Theme.size.width, alignSelf: 'center'}}>
           <Text
@@ -700,219 +456,79 @@ const EditProfile = ({navigation}) => {
                 marginTop: moderateScale(10),
               },
             ]}>
-            {firstName} {lastName},Age {getAge(dob)} years
+            {firstName} {lastName},Age {age} years
             {'\n'}
-            {city}
+            {city} {country}
           </Text>
-          <CardContainer
-            heading={'About Me'}
-            component={() => {
-              return (
-                <>
-                  <Text style={styles.inputTitle}>First Name</Text>
-                  <TextInput
-                    style={styles.inputText}
-                    value={firstName}
-                    onChangeText={setFirstName}
-                  />
-                  <Text style={styles.inputTitle}>Last Name</Text>
-                  <TextInput
-                    style={styles.inputText}
-                    value={lastName}
-                    onChangeText={setLastName}
-                  />
-                  {/* <Text style={styles.inputTitle}>Nick Name</Text>
-                  <TextInput
-                    style={styles.inputText}
-                    value={nickName}
-                    onChangeText={setNickName}
-                  /> */}
-                  <Text style={styles.redText}>
-                    Last name will not be visible on your profie to other people
-                  </Text>
-                  <Text style={styles.inputTitle}>Birthday</Text>
-                  <Text
-                    onPress={() => datePIckerOpen.current.open()}
-                    style={[
-                      styles.inputText,
-                      {
-                        textAlignVertical: 'center',
-                      },
-                    ]}>
-                    {dob}
-                  </Text>
-                  <Text style={styles.inputTitle}>Height</Text>
-                  <CustomDropDown
-                    data={heightData}
-                    open={heightOpen}
-                    setOpen={setHeightOpen}
-                    show={height}
-                    setData={setHeight}
-                  />
-                  <Text style={styles.inputTitle}>Gender</Text>
-                  <RowButton
-                    value={gender}
-                    setValue={setGender}
-                    firstPossible="man"
-                    secPossible="lady"
-                    FirstTag="Male"
-                    SecTag="Female"
-                  />
 
-                  <Text style={styles.inputTitle}>Hobbies</Text>
-                  <CustomDropDown
-                    data={hobbiesData}
-                    open={hobbiesOpen}
-                    setOpen={setHobbiesOPen}
-                    show={hobbies}
-                    setData={setHobbies}
-                    multiple={true}
-                  />
-                  <FlatList
-                    numColumns={3}
-                    data={hobbies}
-                    renderItem={hobbiesRenderItem}
-                    columnWrapperStyle={{
-                      paddingLeft: '5%',
-                    }}
-                  />
-                  <Text style={styles.inputTitle}>Looking For</Text>
-                  <CustomDropDown
-                    data={['My Better Half', 'Friends', 'Socializing']}
-                    open={lookingForOPen}
-                    setOpen={setLookingForOpen}
-                    show={
-                      lookingFor === 'HALF'
-                        ? 'My Better Half'
-                        : lookingFor === 'FRIENDS'
-                        ? 'Friends'
-                        : 'Socializing'
-                    }
-                    setData={setLookingFor}
-                  />
-                  <Text style={styles.inputTitle}>You Bio</Text>
-                  <TextInput
-                    style={[styles.inputText, styles.bioInputCont]}
-                    multiline={true}
-                    placeholder="Write more about yourslef,family and partner ...."
-                    placeholderTextColor={Theme.colors.gray}
-                    value={bio}
-                    onChangeText={setBio}
-                  />
-                </>
-              );
+          <Text style={styles.titless}>Gender</Text>
+          <RowButton
+            value={gender}
+            setValue={setGender}
+            firstPossible="men"
+            secPossible="women"
+            FirstTag="Male"
+            SecTag="Female"
+          />
+          <Text style={styles.titless}>Hobbies</Text>
+          <CustomDropDown
+            yes={true}
+            data={hobbiesData}
+            open={hobbiesOpen}
+            setOpen={setHobbiesOPen}
+            show={hobbies}
+            setData={setHobbies}
+            multiple={true}
+          />
+          <FlatList
+            numColumns={3}
+            data={hobbies}
+            renderItem={hobbiesRenderItem}
+            columnWrapperStyle={{
+              paddingLeft: '5%',
             }}
           />
 
-          <CardContainer
-            heading={'Education and career'}
-            component={() => {
-              return (
-                <>
-                  <Text style={styles.inputTitle}>Qualification</Text>
-                  <CustomDropDown
-                    data={qualificationData}
-                    open={educationOpen}
-                    setOpen={setEducationOpen}
-                    show={education}
-                    setData={setEducation}
-                  />
-                  <Text style={styles.inputTitle}>Family Origin</Text>
-                  <CustomDropDown
-                    data={communityData}
-                    open={communityOpen}
-                    setOpen={setCommunityOPen}
-                    show={community}
-                    setData={setCommunity}
-                  />
-                  <Text style={styles.inputTitle}>Works At</Text>
-                  <TextInput
-                    style={styles.inputText}
-                    value={workWith}
-                    onChangeText={setWorkWith}
-                  />
-                  <Text style={styles.inputTitle}>Work As</Text>
-                  <CustomDropDown
-                    data={asAData}
-                    open={worksAsOpen}
-                    setOpen={setWorksAsOpen}
-                    show={workAs}
-                    setData={setWorkAs}
-                  />
-                </>
-              );
-            }}
+          <Text style={styles.titless}>Looking For</Text>
+          <CustomDropDown
+            yes={true}
+            data={['men', 'women', 'everyone']}
+            open={lookingForOPen}
+            setOpen={setLookingForOpen}
+            show={lookingFor}
+            setData={setLookingFor}
           />
+          <Text style={styles.titless}>Education and Career</Text>
 
-          <CardContainer
-            heading={'Life Style'}
-            component={() => {
-              return (
-                <>
-                  <Text style={[styles.inputTitle, {color: 'black'}]}>
-                    Do you Smoke?{'\t'}
-                    <Text style={styles.redText}>(Optional)</Text>
-                  </Text>
-                  <RowButton
-                    value={smoking}
-                    setValue={setSmoking}
-                    firstPossible={true}
-                    secPossible={false}
-                    FirstTag="Yes"
-                    SecTag="No"
-                  />
-                  <Text style={[styles.inputTitle, {color: 'black'}]}>
-                    Do you Drink?{'\t'}
-                    <Text style={styles.redText}>(Optional)</Text>
-                  </Text>
-                  <RowButton
-                    value={drinking}
-                    setValue={setDrinking}
-                    firstPossible={true}
-                    secPossible={false}
-                    FirstTag="Yes"
-                    SecTag="No"
-                  />
-                </>
-              );
-            }}
+          <Text style={styles.inputTitle}>Qualification</Text>
+          <CustomDropDown
+            data={qualificationData}
+            open={educationOpen}
+            setOpen={setEducationOpen}
+            show={education}
+            setData={setEducation}
           />
-
-          <CardContainer
-            heading={'Others'}
-            component={() => {
-              return (
-                <>
-                  <Text style={[styles.inputTitle, {color: 'black'}]}>
-                    Are you willing to relocate{'\t'}
-                    <Text style={styles.redText}>(Optional)</Text>
-                  </Text>
-                  <CustomDropDown
-                    data={[
-                      'Yes Anywhere',
-                      'No',
-                      'Yes,Only Nationally',
-                      'Rather Not Stay',
-                    ]}
-                    setData={setRelocate}
-                    show={relocate}
-                    open={relocateOpen}
-                    setOpen={setRelocateOpen}
-                  />
-                  <Text style={[styles.inputTitle, {color: 'black'}]}>
-                    Any Disability?
-                  </Text>
-                  <RowButton
-                    value={disable}
-                    setValue={setDisable}
-                    firstPossible={true}
-                    secPossible={false}
-                    FirstTag="Yes"
-                    SecTag="No"
-                  />
-                </>
-              );
-            }}
+          <Text style={styles.inputTitle}>Family Origin</Text>
+          <CustomDropDown
+            data={communityData}
+            open={communityOpen}
+            setOpen={setCommunityOPen}
+            show={community}
+            setData={setCommunity}
+          />
+          <Text style={styles.inputTitle}>Works At</Text>
+          <TextInput
+            style={styles.inputText}
+            value={workWith}
+            onChangeText={setWorkWith}
+          />
+          <Text style={styles.inputTitle}>Work As</Text>
+          <CustomDropDown
+            data={asAData}
+            open={worksAsOpen}
+            setOpen={setWorksAsOpen}
+            show={workAs}
+            setData={setWorkAs}
           />
         </View>
         <RBSheet
@@ -953,7 +569,15 @@ const EditProfile = ({navigation}) => {
             Open Gallery
           </Text>
         </RBSheet>
+        <View style={{height: 40}} />
+        <CustomButton
+          tag="Update"
+          onPress={() => {
+            handleSave();
+          }}
+        />
       </ScrollView>
+
       <CustomActivity show={showActivity} />
     </SafeAreaView>
   );
@@ -965,29 +589,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   header: {
+    height: moderateScale(45),
+    width: Dimensions.get('window').width,
     flexDirection: 'row',
-    width: width,
+    paddingHorizontal: 20,
+    borderBottomWidth: 0.5,
+    alignItems: 'flex-end',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    height: moderateScale(60),
-    paddingHorizontal: moderateScale(10),
   },
-  headerTitle: {
-    fontSize: moderateScale(20),
-    fontFamily: Theme.fontFamily.Poppins_Bold,
-    color: 'black',
-    width: '45%',
-    textAlign: 'center',
-  },
+
   photoTab: {
     width: Theme.size.width,
     alignSelf: 'center',
     marginTop: 10,
   },
   photoTitle: {
-    fontSize: Theme.fontSize.title,
-    fontFamily: Theme.fontFamily.Poppins_Bold,
-    color: 'black',
+    fontSize: 26,
+    fontFamily: Theme.fontFamily.Poppins_Medium,
+    color: Theme.colors.primary,
+    marginTop: 20,
   },
   photoCont: {
     width: Theme.size.width,
@@ -1019,6 +639,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
   },
+  titless: {marginVertical: 10, color: Theme.colors.primary},
   imageBottomTabs: {
     width: Theme.size.width,
     flexDirection: 'row',
@@ -1033,13 +654,12 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     fontFamily: Theme.fontFamily.Poppins_Regular,
-    color: Theme.colors.orange,
+    color: Theme.colors.primary,
     marginTop: moderateScale(10),
-    marginLeft: '5%',
     fontSize: moderateScale(12),
   },
   inputText: {
-    width: '90%',
+    width: '100%',
     color: 'black',
     backgroundColor: '#dedbd9',
     alignSelf: 'center',
@@ -1060,24 +680,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Theme.colors.orange,
+    backgroundColor: Theme.colors.primary,
     height: 40,
     borderRadius: 100,
   },
-  bioInputCont: {
-    height: moderateScale(100),
-    textAlignVertical: 'top',
-  },
-  relocateOptionCont: {
-    borderBottomWidth: 0.5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 5,
-    marginTop: 5,
-  },
   dropDownContainer: {
-    width: '90%',
+    width: '100%',
     height: moderateScale(50),
     borderRadius: moderateScale(10),
     overflow: 'hidden',
@@ -1098,11 +706,10 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
   },
   redText: {
-    color: Theme.colors.reverseGradient[0],
-    fontSize: moderateScale(9),
+    fontSize: moderateScale(12),
     marginTop: moderateScale(5),
-    fontFamily: Theme.fontFamily.Poppins_MediumItalic,
-    paddingHorizontal: '5%',
+    fontFamily: Theme.fontFamily.Poppins_Medium,
+    marginTop: 5,
   },
   row: {
     flexDirection: 'row',
@@ -1122,7 +729,7 @@ const styles = StyleSheet.create({
     height: moderateScale(15),
     borderRadius: 100,
     marginRight: moderateScale(10),
-    backgroundColor: Theme.colors.orange,
+    backgroundColor: Theme.colors.primary,
   },
   firstBox: {
     color: 'black',
@@ -1133,13 +740,13 @@ const styles = StyleSheet.create({
   bottomSheetButton: {
     height: moderateScale(50),
     width: '90%',
-    borderColor: Theme.colors.orange,
+    borderColor: Theme.colors.primary,
     borderWidth: 1,
     paddingLeft: moderateScale(30),
     textAlignVertical: 'center',
     borderTopLeftRadius: moderateScale(10),
     borderTopRightRadius: moderateScale(10),
-    color: Theme.colors.orange,
+    color: Theme.colors.primary,
     fontFamily: Theme.fontFamily.Poppins_Bold,
     fontSize: moderateScale(16),
   },
@@ -1184,7 +791,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
     color: 'white',
-    backgroundColor: Theme.colors.orange,
+    backgroundColor: Theme.colors.primary,
     fontFamily: Theme.fontFamily.Poppins_Medium,
     fontSize: moderateScale(15),
     alignSelf: 'center',
@@ -1193,4 +800,211 @@ const styles = StyleSheet.create({
   },
 });
 
+// const check = () => {
+//   if (
+//     response.first_name !== firstName ||
+//     response.last_name !== lastName ||
+//     response.looking_for !== lookingFor ||
+//     response.gender !== gender ||
+//     response.date_of_birth !== dob ||
+//     response.height !== height ||
+//     response.bio !== bio ||
+//     JSON.parse(response.hobbies) !== hobbies ||
+//     response.qualification !== education ||
+//     response.smoke !== smoking ||
+//     response.drink !== drinking ||
+//     response.relocate !== relocate ||
+//     response.selfie !== selfie ||
+//     response.images !== images
+//   ) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// };
+
 export default EditProfile;
+
+const CustomDropDown = ({
+  open,
+  setOpen,
+  data,
+  setData,
+  show,
+  multiple,
+  yes = false,
+}) => {
+  return (
+    <View
+      style={[
+        styles.dropDownContainer,
+        yes && {
+          borderRadius: 100,
+        },
+      ]}>
+      {multiple ? (
+        <ModalDropdown
+          options={data}
+          onDropdownWillShow={() => setOpen(true)}
+          onDropdownWillHide={() => setOpen(false)}
+          multipleSelect={true}
+          renderRow={option => {
+            let temp = show.filter(f => f === option);
+            return (
+              <View
+                style={{
+                  width: '100%',
+                  height: moderateScale(35),
+
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: moderateScale(10),
+                  backgroundColor: 'white',
+                }}>
+                <Text
+                  style={{
+                    color: temp.length !== 0 ? 'black' : 'grey',
+                    fontFamily: Theme.fontFamily.Poppins_Regular,
+                    fontSize: moderateScale(14),
+                  }}>
+                  {option}
+                </Text>
+                <Text
+                  style={{
+                    color:
+                      temp.length !== 0
+                        ? Theme.colors.reverseGradient[0]
+                        : 'transparent',
+                  }}>
+                  ✓
+                </Text>
+              </View>
+            );
+          }}
+          onSelect={index => {
+            let temporay = show.filter(f => f === data[index]);
+            if (temporay.length !== 0) {
+              setData(show.filter(f => f !== data[index]));
+            } else {
+              let temp = show.push(data[index]);
+            }
+          }}
+          dropdownStyle={{
+            width: (width / 100) * 90,
+          }}
+          style={{
+            wid: '100%',
+            height: '100%',
+          }}>
+          <View style={styles.dropDownContainerWrapper}>
+            <Text style={[styles.dropDownText]}>
+              {multiple !== true ? show : 'Hobbies'}
+            </Text>
+            <AntDesign name={open ? 'caretup' : 'caretdown'} />
+          </View>
+        </ModalDropdown>
+      ) : (
+        <ModalDropdown
+          options={data}
+          onDropdownWillShow={() => setOpen(true)}
+          onDropdownWillHide={() => setOpen(false)}
+          onSelect={index => {
+            setData(data[index]);
+          }}
+          dropdownStyle={{
+            width: (width / 100) * 90,
+            borderBottomLeftRadius: 15,
+            borderBottomRightRadius: 15,
+          }}
+          dropdownTextStyle={{
+            backgroundColor: 'transparent',
+            borderRadius: 20,
+            textAlign: 'center',
+          }}
+          style={{
+            wid: '100%',
+            height: '100%',
+          }}>
+          <View style={styles.dropDownContainerWrapper}>
+            <Text style={[styles.dropDownText]}>
+              {show === 'null' ? '' : show}
+            </Text>
+            <AntDesign name={open ? 'caretup' : 'caretdown'} />
+          </View>
+        </ModalDropdown>
+      )}
+    </View>
+  );
+};
+
+const RowButton = ({
+  value,
+  setValue,
+  firstPossible,
+  secPossible,
+  FirstTag,
+  SecTag,
+}) => {
+  return (
+    <View style={styles.genderButtonCont}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={[
+          styles.genderButton,
+          {
+            backgroundColor:
+              value === firstPossible ? Theme.colors.primary : '#dedbd9',
+          },
+        ]}
+        onPress={() => {
+          setValue(firstPossible);
+        }}>
+        <Text
+          style={{
+            fontFamily: Theme.fontFamily.Poppins_Regular,
+            color: value === firstPossible ? 'white' : 'grey',
+          }}>
+          {FirstTag}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={[
+          styles.genderButton,
+          {
+            backgroundColor:
+              value === secPossible ? Theme.colors.primary : '#dedbd9',
+          },
+        ]}
+        onPress={() => {
+          setValue(secPossible);
+        }}>
+        <Text
+          style={{
+            fontFamily: Theme.fontFamily.Poppins_Regular,
+            color: value === secPossible ? 'white' : 'grey',
+          }}>
+          {SecTag}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export const getAge = dob => {
+  var date_of_birth = new Date(dob);
+  //calculate month difference from current date in time
+  var month_diff = Date.now() - date_of_birth.getTime();
+
+  //convert the calculated difference in date format
+  var age_dt = new Date(month_diff);
+
+  //extract year from date
+  var year = age_dt.getUTCFullYear();
+
+  //now calculate the age of the user
+  var age = Math.abs(year - 1970);
+
+  return age;
+};

@@ -4,12 +4,12 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 buildscript {
     ext {
-        buildToolsVersion = "31.0.0"
+        buildToolsVersion = "32.0.0"
         minSdkVersion = 21
-        compileSdkVersion = 31
-        targetSdkVersion = 31
+        compileSdkVersion = 32
+        targetSdkVersion = 32
         googlePlayServicesAuthVersion = "19.2.0"
-
+         kotlinVersion = "1.5.31"
         if (System.properties['os.arch'] == "aarch64") {
             // For M1 Users we need to use the NDK 24 which added support for aarch64
             ndkVersion = "24.0.8215888"
@@ -27,7 +27,7 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("de.undercouch:gradle-download-task:4.1.2")
         classpath 'com.google.gms:google-services:4.3.13'
-        
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
         // classpath("com.google.gms:google-services:4.0.1")
 
         // NOTE: Do not place your application dependencies here; they belong

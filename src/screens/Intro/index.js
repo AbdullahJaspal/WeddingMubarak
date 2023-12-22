@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {
   Image,
@@ -7,11 +8,15 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import {moderateScale} from '../../Theme/Dimensions';
 import Theme from '../../Theme/Theme';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 // import auth from '@react-native-firebase/auth';
 import {
   LoginManager,
@@ -19,15 +24,15 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from 'react-native-fbsdk-next';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {CustomActivity} from '../../assets/Components/CustomActivity';
-import {userLogin} from '../../redux/actions/auth';
-
+import {saveToken, userLogin} from '../../redux/actions/auth';
 const {width, height} = Dimensions.get('window');
 
 const Intro = ({navigation}) => {
   const dispatch = useDispatch();
   const [showActivity, setShowActivity] = useState(false);
+  const {token} = useSelector(state => state.auth);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -37,8 +42,8 @@ const Intro = ({navigation}) => {
       // offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
     });
   }, []);
-
   const handleGoogleSignIn = async () => {
+    console.log('yesss');
     // try {
     //   await GoogleSignin.hasPlayServices();
     //   const userInfo = await GoogleSignin.signIn();
@@ -50,7 +55,8 @@ const Intro = ({navigation}) => {
     // Get the users ID token
     const result = await GoogleSignin.signIn();
 
-    // console.log(result);
+    console.log('ok');
+    console.log(result);
 
     handleLogin(result.user.email);
 
@@ -127,12 +133,17 @@ const Intro = ({navigation}) => {
     formdata.append('email', email);
     const data = email;
     const link = 'login_user';
+    // navigation.replace(res, {field: 'Phone', data: data});
     setShowActivity(true);
     dispatch(userLogin(link, formdata, onSuccessLogin, onErrorLogin, data));
   };
 
   const onSuccessLogin = (res, data) => {
     setShowActivity(false);
+    console.log('data');
+    console.log(data);
+    console.log('res');
+    console.log(res);
     navigation.replace(res, {field: 'Phone', data: data});
   };
 
@@ -146,10 +157,10 @@ const Intro = ({navigation}) => {
       <View
         style={{
           position: 'absolute',
-          bottom: 0,
+          bottom: 3,
           alignItems: 'center',
           justifyContent: 'center',
-          height: moderateScale(260),
+          height: moderateScale(300),
         }}>
         <View
           style={{
@@ -173,6 +184,21 @@ const Intro = ({navigation}) => {
             );
           })}
         </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.replace('Login');
+          }}>
+          <Text style={{color: 'black', fontWeight: '600'}}>Sign In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.replace('Auth', {field: `Phone`});
+          }}>
+          <Text style={{color: 'black', fontWeight: '600'}}>Sign Up</Text>
+        </TouchableOpacity>
+
         <Text
           style={{
             color: 'white',
@@ -180,105 +206,79 @@ const Intro = ({navigation}) => {
             marginTop: 10,
             fontFamily: Theme.fontFamily.Poppins_Medium,
           }}>
-          First time on Zivaj.com?
+          or continue with
         </Text>
-        <TouchableOpacity
-          onPress={() => handleGoogleSignIn()}
-          // onPress={() => navigation.replace('Auth', {field: `Phone`})}
-          activeOpacity={1}
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() => handleGoogleSignIn()}
+            // onPress={() => navigation.replace('Auth', {field: `Phone`})}
+            activeOpacity={1}
+            style={styles.buttonCont}>
+            <Image
+              source={require('../../assets/images/google.png')}
+              style={{
+                width: moderateScale(20),
+                height: moderateScale(20),
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleFacebookSignIn()}
+            activeOpacity={1}
+            style={styles.buttonCont}>
+            <Image
+              source={require('../../assets/images/facebook-app-symbol.png')}
+              style={{
+                width: moderateScale(25),
+                height: moderateScale(25),
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PhoneNumberInput')}
+            activeOpacity={1}
+            style={styles.buttonCont}>
+            <Image
+              source={require('../../assets/images/calls.png')}
+              style={{
+                width: moderateScale(20),
+                height: moderateScale(20),
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: moderateScale(50),
-            width: (width / 100) * 75,
-            backgroundColor: 'white',
-            borderRadius: 100,
-            marginTop: 15,
+            color: 'white',
+            fontSize: moderateScale(13),
+            marginTop: 5,
+            fontFamily: Theme.fontFamily.Poppins_Medium,
           }}>
-          <Image
-            source={require('../../assets/images/google.png')}
-            style={{
-              width: moderateScale(25),
-              height: moderateScale(25),
-              resizeMode: 'contain',
-              marginRight: 10,
-            }}
-          />
-          <Text
-            style={{
-              color: 'black',
-              fontSize: moderateScale(15),
-              fontFamily: Theme.fontFamily.Poppins_SemiBold,
-            }}>
-            Continue with Google{' '}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handleFacebookSignIn()}
-          activeOpacity={1}
+          Need help?
+        </Text>
+        <Text
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: moderateScale(50),
-
-            width: (width / 100) * 75,
-            backgroundColor: '#4267B2',
-            borderRadius: 100,
-            marginTop: 10,
+            color: 'white',
+            fontSize: moderateScale(13),
+            fontFamily: Theme.fontFamily.Poppins_Medium,
+            fontWeight: '600',
+          }}
+          onPress={() => {
+            Linking.openURL('http://weddingmubbarak.com/privacy-policy.html');
           }}>
-          <Image
-            source={require('../../assets/images/facebook-app-symbol.png')}
-            style={{
-              width: moderateScale(25),
-              height: moderateScale(25),
-              resizeMode: 'contain',
-              marginRight: 10,
-            }}
-          />
-          <Text
-            style={{
-              color: 'white',
-              fontSize: moderateScale(15),
-              fontFamily: Theme.fontFamily.Poppins_SemiBold,
-            }}>
-            Continue with facebook{' '}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('PhoneNumberInput')}
-          activeOpacity={1}
+          Terms & Privacy Policy
+        </Text>
+        <Text
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: moderateScale(50),
-
-            width: (width / 100) * 75,
-            backgroundColor: 'white',
-            borderRadius: 100,
-            marginTop: 10,
-            marginBottom: 15,
+            color: 'white',
+            fontSize: moderateScale(11),
+            fontFamily: Theme.fontFamily.Poppins_Medium,
           }}>
-          <Image
-            source={require('../../assets/images/call.png')}
-            style={{
-              width: moderateScale(25),
-              height: moderateScale(25),
-              resizeMode: 'contain',
-              marginRight: 10,
-            }}
-          />
-          <Text
-            style={{
-              color: 'black',
-              fontSize: moderateScale(15),
-              fontFamily: Theme.fontFamily.Poppins_SemiBold,
-            }}>
-            Continue with Number
-          </Text>
-        </TouchableOpacity>
+          By continuing you agree to our terms & policy
+        </Text>
       </View>
     );
   };
@@ -298,35 +298,16 @@ const Intro = ({navigation}) => {
           style={{
             width: width,
           }}
-          source={require('../../assets/images/1.jpg')}>
+          source={require('../../assets/images/1.jpeg')}>
           <View style={styles.blur} />
-          <Image
-            style={{
-              width: width / 2,
-              resizeMode: 'contain',
-              alignSelf: 'center',
-              height: moderateScale(150),
-            }}
-            source={require('../../assets/images/placeholder-logo-1.png')}
-          />
         </ImageBackground>
         <ImageBackground
           resizeMode="cover"
           style={{
             width: width,
           }}
-          source={require('../../assets/images/2.jpg')}>
+          source={require('../../assets/images/2.jpeg')}>
           <View style={styles.blur} />
-          <Image
-            style={{
-              width: width / 2,
-              resizeMode: 'contain',
-              alignSelf: 'center',
-              height: moderateScale(150),
-            }}
-            source={require('../../assets/images/placeholder-logo-1.png')}
-          />
-
           <View
             style={{
               marginTop: 'auto',
@@ -360,17 +341,8 @@ const Intro = ({navigation}) => {
           style={{
             width: width,
           }}
-          source={require('../../assets/images/3.jpg')}>
+          source={require('../../assets/images/3.jpeg')}>
           <View style={styles.blur} />
-          <Image
-            style={{
-              width: width / 2,
-              resizeMode: 'contain',
-              alignSelf: 'center',
-              height: moderateScale(150),
-            }}
-            source={require('../../assets/images/placeholder-logo-1.png')}
-          />
           <View
             style={{
               flexDirection: 'row',
@@ -407,7 +379,7 @@ const Intro = ({navigation}) => {
               </Text>
             </View>
             <Image
-              source={require('../../assets/images/3.jpg')}
+              source={require('../../assets/images/3.jpeg')}
               style={{
                 width: width / 2.2,
                 height: height / 3.2,
@@ -432,6 +404,26 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'black',
     opacity: 0.4,
+  },
+  button: {
+    backgroundColor: 'white',
+    width: 200,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  buttonCont: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: moderateScale(45),
+    width: moderateScale(45),
+    backgroundColor: 'white',
+    borderRadius: 100,
+    marginHorizontal: 3,
+    marginVertical: 5,
   },
 });
 

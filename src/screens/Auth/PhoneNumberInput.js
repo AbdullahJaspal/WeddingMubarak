@@ -13,6 +13,7 @@ import {Header} from '../../assets/Components/Header';
 import {moderateScale} from '../../Theme/Dimensions';
 import Theme from '../../Theme/Theme';
 import ShowSnackBar from '../../assets/Components/ShowSnackBar';
+import {Icon} from '@rneui/base';
 
 const {width} = Dimensions.get('window');
 
@@ -21,23 +22,37 @@ const PhoneNumberInput = ({navigation}) => {
 
   const inputPhone = useRef();
 
-  const handle = () => {
-    if (inputPhone.current?.isValidNumber(value) === true) {
-      navigation.replace('VerifyPhone', {
-        number: value,
-      });
-    } else {
-      ShowSnackBar('Invalid Number...', 'red');
-    }
-  };
+  // const handle = () => {
+  //   if (inputPhone.current?.isValidNumber(value) === true) {
+  //     navigation.replace('VerifyPhone', {
+  //       number: value,
+  //     });
+  //   } else {
+  //     ShowSnackBar('Invalid Number...', 'red');
+  //   }
+  // };
 
   return (
     <View style={styles.mainContainer}>
-      <Header
-        leftOnpress={() => {
-          navigation.goBack();
-        }}
-      />
+      <View style={styles.header}>
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginBottom: 5}}>
+          <Icon
+            name="caretleft"
+            type="ant-design"
+            size={20}
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
+          <Text style={{fontSize: 24}}>Phone Number</Text>
+        </View>
+        <Image
+          style={{height: 30, width: '25%', marginBottom: 5}}
+          source={require('../../assets/images/homeLogo.png')}
+          resizeMode={'contain'}
+        />
+      </View>
 
       <Text style={styles.topText}>Please enter your Phone Number</Text>
 
@@ -46,6 +61,7 @@ const PhoneNumberInput = ({navigation}) => {
         textContainerStyle={styles.textContainerStyle}
         textInputStyle={{
           height: moderateScale(30),
+          padding: 0,
         }}
         codeTextStyle={{
           height: moderateScale(25),
@@ -62,7 +78,7 @@ const PhoneNumberInput = ({navigation}) => {
         autoFocus
       />
       <View style={styles.buttonWrapper}>
-        <CustomButton tag={'Continue'} onPress={() => handle()} />
+        <CustomButton tag={'Continue'} onPress={() => {}} />
       </View>
     </View>
   );
@@ -97,6 +113,15 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginTop: 'auto',
     marginBottom: moderateScale(20),
+  },
+  header: {
+    height: moderateScale(45),
+    width: Dimensions.get('window').width,
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    borderBottomWidth: 0.5,
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
   },
 });
 

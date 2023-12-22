@@ -3,12 +3,18 @@ import {AUTH_PENDING, AUTH_ERROR} from '../actions/auth';
 import Theme from '../../Theme/Theme';
 
 const initialState = {
-  token: '',
+  token: 'no token',
   call: '',
   userData: {},
   loggedIn: false,
   likeSubs: false,
   premiumSubs: false,
+  filters: {
+    martial_status: 'empty',
+    religion: 'empty',
+    community: 'empty',
+    language: 'empty',
+  },
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -38,6 +44,16 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         premiumSubs: action.payload,
+      };
+    case types.SAVE_TOKEN:
+      return {
+        ...state,
+        token: action.payload,
+      };
+    case types.SET_FILTERS:
+      return {
+        ...state,
+        filters: action.payload,
       };
     case types.LOGOUT:
       return {

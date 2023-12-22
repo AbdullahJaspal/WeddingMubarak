@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderRadius: 20,
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 30,
     justifyContent: 'center',
     marginHorizontal: 20,
   },
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   monthText: {
     fontFamily: Theme.fontFamily.Poppins_Regular,
-    backgroundColor: '#60166C',
+    backgroundColor: Theme.colors.primary,
     color: 'white',
     width: '100%',
     textAlign: 'center',
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   twenety: {
     fontFamily: Theme.fontFamily.Poppins_Bold,
-    color: '#60166C',
+    color: Theme.colors.primary,
   },
   rupee: {
     color: Theme.colors.gray,
