@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>900226588142-8c0800mesfvudu57v783n2g2msumoroa.apps.googleusercontent.com</string>
+	<string>98152326268-bho2ptknq60b0um56454paaia546lq3i.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.900226588142-8c0800mesfvudu57v783n2g2msumoroa</string>
+	<string>com.googleusercontent.apps.98152326268-bho2ptknq60b0um56454paaia546lq3i</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>900226588142-easg3g8jobp5c02d4ou9egthjm1p7rso.apps.googleusercontent.com</string>
+	<string>98152326268-8pr10utqg788t11vuj92n86cbi6h4kr8.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCstmeXhlx15YGhoX6KtFuD3liN8twqLPk</string>
+	<string>AIzaSyBECbtHgd6-gwqnGFicyHzM5_hqx_N_hlA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>900226588142</string>
+	<string>98152326268</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.Zivaj</string>
+	<string>org.reactjs.native.example.WeddingMubarak</string>
 	<key>PROJECT_ID</key>
-	<string>zivaj-d5fa2</string>
+	<string>wedding-mubarak-2ba17</string>
 	<key>STORAGE_BUCKET</key>
-	<string>zivaj-d5fa2.appspot.com</string>
+	<string>wedding-mubarak-2ba17.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:900226588142:ios:4ef77a43e7995e003742ff</string>
+	<string>1:98152326268:ios:38a797db3e1db60a8895f9</string>
 </dict>
 </plist>
